@@ -1,5 +1,3 @@
-// src/domain/User.js
-
 class User {
   constructor({ id = null, name, email, passwordHash }) {
     if (!name || !email || !passwordHash) {
