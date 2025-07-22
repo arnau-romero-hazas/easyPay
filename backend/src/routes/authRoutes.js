@@ -1,13 +1,9 @@
 const express = require('express')
 const router = express.Router()
 
-// Placeholder routes
-router.post('/register', (req, res) => {
-  res.json({ message: 'Register endpoint' })
-})
+const authController = require('../controllers/authController')
 
-router.post('/login', (req, res) => {
-  res.json({ message: 'Login endpoint' })
-})
+router.post('/register', authController.register)
+router.post('/login', authController.login)
 
 module.exports = router

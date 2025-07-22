@@ -1,5 +1,5 @@
 class User {
-  constructor({ id = null, name, email, passwordHash }) {
+  constructor({ id = null, name, username, email, passwordHash }) {
     if (!name || !username || !email || !passwordHash) {
       throw new Error('Missing required fields to create a User')
     }

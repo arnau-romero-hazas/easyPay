@@ -26,7 +26,12 @@ async function registerUser({ name, username, email, password }, { userRepositor
   const user = new User({ name, username, email, passwordHash })
   const savedUser = await userRepository.save(user)
 
-  return savedUser
+  return {
+    id: savedUser.id,
+    name: savedUser.name,
+    username: savedUser.username,
+    email: savedUser.email
+  }
 }
 
 module.exports = registerUser
