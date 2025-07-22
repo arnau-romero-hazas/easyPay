@@ -1,22 +1,15 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';  // <-- IMPORTANTE para que funcionen los widgets de Flutter
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final String username;
+
+  const HomeScreen({super.key, required this.username});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('easyPay'),
-      ),
-      body: Center(
-              child: ElevatedButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/login');
-        },
-        child: const Text('Go to Login'),
-      ),
-      ),
+      appBar: AppBar(title: const Text('easyPay Home')),
+      body: Center(child: Text('Welcome, $username!')),
     );
   }
 }

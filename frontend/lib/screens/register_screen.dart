@@ -1,88 +1,103 @@
-import 'package:flutter/material.dart'; //Importa el toolkit UI de Flutter
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class RegisterScreen extends StatelessWidget { //Pantalla sin estado (Stateless)
-  const RegisterScreen({super.key}); //Constructor con key opcional
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  Widget build(BuildContext context) { //Método principal de renderizado
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
 
-    //Controladores para leer el texto ingresado
-    final nameController = TextEditingController();
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-    final confirmPasswordController = TextEditingController();
+class _RegisterScreenState extends State<RegisterScreen> {
+  final nameController = TextEditingController();
+  final usernameController = TextEditingController(); // NUEVO
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
-    return Scaffold( //Estructura general de la pantalla
-      appBar: AppBar(
-        title: const Text('Register'), //Título en la barra superior
-      ),
+  Future<void> handleRegister() async {
+    final name = nameController.text.trim();
+    final username = usernameController.text.trim();
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+    final confirmPassword = confirmPasswordController.text.trim();
+
+    if (password != confirmPassword) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Passwords do not match')),
+      );
+      return;
+    }
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:3000/api/auth/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'name': name,
+          'username': username,
+          'email': email,
+          'password': password,
+        }),
+      );
+
+      if (!mounted) return;
+
+      if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('User registered successfully')),
+        );
+        Navigator.pushReplacementNamed(context, '/login');
+      } else {
+        final error = jsonDecode(response.body)['error'] ?? 'Registration failed';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $error')),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Network error: $e')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Register')),
       body: Padding(
-        padding: const EdgeInsets.all(16.0), //Margen alrededor del contenido
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch, //Que los hijos ocupen todo el ancho
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const Text('Create your account',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center),
+            const SizedBox(height: 32),
 
-            const Text(
-              'Create your account', //Título grande
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-
-            const SizedBox(height: 32), //Espacio vertical
-
-            //Nombre
-            TextField(
-              controller: nameController,
-              decoration: const InputDecoration(labelText: 'Name'),
-            ),
-
+            TextField(controller: nameController, decoration: const InputDecoration(labelText: 'Name')),
             const SizedBox(height: 16),
 
-            //Email
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
-              keyboardType: TextInputType.emailAddress,
-            ),
-
+            TextField(controller: usernameController, decoration: const InputDecoration(labelText: 'Username')),
             const SizedBox(height: 16),
 
-            //Contraseña
-            TextField(
-              controller: passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-
+            TextField(controller: emailController, decoration: const InputDecoration(labelText: 'Email'), keyboardType: TextInputType.emailAddress),
             const SizedBox(height: 16),
 
-            //Repetir contraseña
-            TextField(
-              controller: confirmPasswordController,
-              decoration: const InputDecoration(labelText: 'Confirm Password'),
-              obscureText: true,
-            ),
+            TextField(controller: passwordController, decoration: const InputDecoration(labelText: 'Password'), obscureText: true),
+            const SizedBox(height: 16),
 
+            TextField(controller: confirmPasswordController, decoration: const InputDecoration(labelText: 'Confirm Password'), obscureText: true),
             const SizedBox(height: 24),
 
-            //Botón de registrar
-            ElevatedButton(
-              onPressed: () {
-                // TODO: añadir lógica de registro
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Register button pressed')),
-                );
-              },
-              child: const Text('Register'),
-            ),
-
+            ElevatedButton(onPressed: handleRegister, child: const Text('Register')),
             const SizedBox(height: 12),
 
-            // Enlace para ir a Login
             TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/login');
-              },
+              onPressed: () => Navigator.pushNamed(context, '/login'),
               child: const Text('Already have an account? Log in'),
             ),
           ],
