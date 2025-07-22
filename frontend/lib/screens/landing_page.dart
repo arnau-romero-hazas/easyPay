@@ -50,16 +50,16 @@ class LandingPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 const Text(
-                  "Este proyecto nace para demostrar mi entusiasmo por unirme al equipo de Bondy y mi interés en aprender Flutter para poder desempeñar el trabajo con éxito. "
-                  "Es una iniciativa para que puedan ver cómo aplico arquitectura hexagonal, buenas prácticas y diseño limpio, desarrollando funcionalidades reales que reflejan mi forma de trabajar y colaborar."
-                  "Quiero que esta app sea una muestra auténtica de mi compromiso y profesionalidad para la entrevista y más allá.",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Color(0xFF6A6A6A),
-                    height: 1.4,
-                  ),
-                  textAlign: TextAlign.center,
+                "Este proyecto nace del entusiasmo por unirme al equipo de Bondy y aprender Flutter para aportar valor desde el primer día.\n\n"
+                "easyPay es una muestra práctica de cómo aplico arquitectura hexagonal, buenas prácticas de desarrollo y un diseño limpio. He construido funcionalidades reales que reflejan mi forma de trabajar, colaborar y resolver.\n\n"
+                "Mi objetivo es que esta app sea una representación auténtica de mi compromiso y profesionalidad, no solo para la entrevista, sino también para crecer junto al equipo.",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Color(0xFF6A6A6A),
+                  height: 1.5,
                 ),
+                textAlign: TextAlign.center,
+              ),
                 const SizedBox(height: 32),
 
                 // Botón Login
