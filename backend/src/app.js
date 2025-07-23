@@ -18,9 +18,13 @@ app.use((req, res, next) => {
   next()
 })
 
-// Routes
+// authRoutes
 const authRoutes = require('./routes/authRoutes')
 app.use('/api/auth', authRoutes) // All auth endpoints go under /api/auth
+
+// Payment routes
+const paymentRoutes = require('./routes/paymentRoutes');
+app.use('/api/payments', paymentRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 3000

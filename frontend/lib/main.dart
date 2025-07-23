@@ -1,10 +1,21 @@
-import 'package:flutter/material.dart'; // Core Flutter UI framework
+import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart'; // Core Flutter UI framework
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'screens/landing_page.dart';  
-import 'screens/login_screen.dart';     // ⬅nueva línea
-import 'screens/register_screen.dart';    // Our custom home screen
+import 'screens/login_screen.dart';     
+import 'screens/register_screen.dart';    
 import 'screens/home_screen.dart';
 
-void main() {
+
+void main() async{
+   WidgetsFlutterBinding.ensureInitialized();
+
+  if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+    Stripe.publishableKey = 'pk_test_xxx';
+    await Stripe.instance.applySettings();
+  }
+  
   runApp(const EasyPayApp()); // Entry point of the app
 }
 
